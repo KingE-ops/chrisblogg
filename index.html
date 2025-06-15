@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chrisland Blog</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; padding: 0; margin: 0; }
+    body, html { height: 100%; overflow: hidden; font-family: 'Poppins', sans-serif;
+    overflow-x: hidden;
+ }
+
+    video.bg-video {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      z-index: -1;
+      filter: brightness(0.4);
+    }
+
+    .carousel-container {
+      position: absolute;
+      top: 50%; left: 80%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      width: 100%;
+      max-width: 100%;
+      padding: 0 20px;
+    }
+
+    .carousel-card {
+      min-width: 250px;
+      height: 350px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 20px;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      font-weight: bold;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+      transition: transform 0.6s ease, opacity 0.6s ease;
+      cursor: pointer;
+      position: absolute;
+      opacity: 0;
+    }
+
+    .carousel-card.active {
+      transform: scale(1) translateX(0);
+      z-index: 3;
+      opacity: 1;
+    }
+
+    .carousel-card.left {
+      transform: scale(0.8) translateX(-220px);
+      z-index: 2;
+      opacity: 0.6;
+    }
+
+    .carousel-card.right {
+      transform: scale(0.8) translateX(220px);
+      z-index: 2;
+      opacity: 0.6;
+    }
+
+    .carousel-nav {
+      position: absolute;
+      bottom: 50px;
+      left: 300px;
+      width: 100%;
+      display: none;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+    }
+
+    .carousel-btn {
+      background: rgba(255,255,255,0.2);
+      color: rgba(255, 255, 255, 0.196);
+      font-size: 1.5rem;
+      display: none;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .carousel-btn:hover {
+      background: rgba(255,255,255,0.4);
+    }
+
+    @media (max-width: 600px) {
+      .carousel-card {
+        min-width: 200px;
+        height: 300px;
+      }
+
+ .carousel-container {
+      position: absolute;
+      top: 70%; left: 40%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      width: 100%;
+      max-width: 100%;
+      padding: 0 20px;
+    }
+    }
+
+    .news{
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      z-index: -1;
+      border-radius: 10px;
+      filter: brightness(0.4);
+    }
+
+    .news-1{
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: right;
+      z-index: -1;
+      border-radius: 10px;
+      filter: brightness(0.4);
+    }
+    .news-2{
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      /* object-position: right; */
+      z-index: -1;
+      border-radius: 10px;
+      filter: brightness(0.4);
+    }
+    .news-3{
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      /* object-position: right; */
+      z-index: -1;
+      border-radius: 10px;
+      filter: brightness(0.4);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Video -->
+  <video class="bg-video" autoplay muted loop>
+    <source src="./images.html/64595-510542195_medium.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <!-- 3D Carousel -->
+  <div class="carousel-container" id="carousel">
+    <div class="carousel-card" onclick="location.href='news.html'"> <video autoplay muted loop src="./images.html/1992-153555258_medium.mp4" type="video/mp4" class="news">
+        Your browser does not support the video tag.
+    </video> Chrisland News</div>
+    <div class="carousel-card" onclick="location.href='creators.html'"> <video autoplay muted loop class="news-2" src="./images.html/75547-556034400_medium.mp4">
+                Your browser does not support the video tag.
+    </video> Content Creators</div>
+    <div class="carousel-card" onclick="location.href='nominees.html'"> <video autoplay muted loop class="news-2" src="./images.html/105437-670487240.mp4">
+       Your browser does not support the video tag.
+    </video> Nominees</div>
+    <div class="carousel-card" onclick="location.href='audios.html'"> <video autoplay muted loop class="news-1" src="./images.html/175594-853887904.mp4">
+        Your browser does not support the video tag
+    </video> Audios</div>
+    <div class="carousel-card" onclick="location.href='chats.html'"> <video autoplay muted loop class="news-3" src="./images.html/202987-919379330_medium.mp4">
+        Your browser does not support the video tag
+    </video> Chats & Updates</div>
+  </div>
+
+  <!-- Script -->
+  <script>
+    const cards = document.querySelectorAll('.carousel-card');
+    let current = 0;
+
+    function updateCarousel() {
+      cards.forEach((card, i) => {
+        card.classList.remove('left', 'right', 'active');
+        if (i === current) card.classList.add('active');
+        else if (i === (current + 1) % cards.length) card.classList.add('right');
+        else if (i === (current - 1 + cards.length) % cards.length) card.classList.add('left');
+      });
+    }
+
+    function nextSlide() {
+      current = (current + 1) % cards.length;
+      updateCarousel();
+    }
+
+    function prevSlide() {
+      current = (current - 1 + cards.length) % cards.length;
+      updateCarousel();
+    }
+
+    // Auto slide every 5 seconds
+    setInterval(nextSlide, 5000);
+
+    // Swipe support for mobile
+    let startX = 0;
+    document.addEventListener('touchstart', e => startX = e.touches[0].clientX);
+    document.addEventListener('touchend', e => {
+      const endX = e.changedTouches[0].clientX;
+      if (endX - startX > 50) prevSlide();
+      else if (startX - endX > 50) nextSlide();
+    });
+
+    // Init on load
+    updateCarousel();
+  </script>
+
+</body>
+</html>
