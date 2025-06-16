@@ -122,6 +122,17 @@
       z-index: 10;
     }
 
+    @media (max-width: 600px) {
+      #welcomeMessage{
+        position: absolute;
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        font-weight: 100;
+        top: 120px;
+        right: 30px;
+        font-size: 25px;
+      }      
+    }
+
     #streakDisplay {
       position: fixed;
       top: 10px;
@@ -209,12 +220,17 @@
     <a href="">Chats & Updates</a>
   </div>
 
+  <div class="carousel-card" onclick="location.href='chats.html'">
+    <!-- <video autoplay muted loop class="news-3" src="./images.html/202987-919379330_medium.mp4"></video> -->
+    <a href="">Log In & Out</a>
+  </div>
+
   <!-- 🔥 NEW LOGOUT CARD -->
-  <div class="carousel-card" id="logoutBtn">
+  <!-- <div class="carousel-card" id="logoutBtn">
     <video autoplay muted loop class="news" src="./images.html/logout-bg.mp4"></video>
     <a href="./login.html">Log In & Out</a>
   </div>
-</div>
+</div> -->
 
   <!-- Preloader -->
   <div id="preloader">
