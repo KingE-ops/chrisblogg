@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login - ChrisBlogg</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      background: url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 40px 30px;
+      border-radius: 16px;
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+      color: white;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 15px;
+    }
+
+    #welcomeMessage {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+      color: #00ffe7;
+      white-space: nowrap;
+      overflow: hidden;
+      /* border-right: 2px solid #00ffe7; */
+      width: 0;
+      animation: typing 3s steps(40, end) forwards;
+    }
+
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+
+    #loginBtn {
+      background: #fff;
+      color: #444;
+      padding: 12px 20px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      transition: background 0.3s ease;
+    }
+
+    #loginBtn:hover {
+      background: #f1f1f1;
+    }
+
+    .google-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    @media (max-width: 500px) {
+      .container {
+        padding: 30px 20px;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      #welcomeMessage {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Welcome to ChrisBlogg</h1>
+    <div id="welcomeMessage">Let’s get started…</div>
+    <button id="loginBtn">
+      <img class="google-icon" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google icon">
+      Sign in with Google
+    </button>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAmmqdPJL1xgjLl3wF5L1z_AprUJ-UEeD8",
+      authDomain: "chrisblogg-a9653.firebaseapp.com",
+      projectId: "chrisblogg-a9653",
+      storageBucket: "chrisblogg-a9653.firebasestorage.app",
+      messagingSenderId: "774622032573",
+      appId: "1:774622032573:web:769b861fd970145293fdd4",
+      measurementId: "G-BJNC1R5RYR"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const loginBtn = document.getElementById('loginBtn');
+    const welcomeMessage = document.getElementById('welcomeMessage');
+
+    loginBtn.addEventListener('click', async () => {
+      const provider = new GoogleAuthProvider();
+      try {
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
+        await handleStreak(user.uid);
+        welcomeMessage.textContent = `Welcome, ${user.displayName} 🎉`;
+        welcomeMessage.style.animation = "none";
+        void welcomeMessage.offsetWidth;
+        welcomeMessage.style.animation = "typing 3s steps(40, end) forwards";
+
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 2000);
+      } catch (error) {
+        alert("Login Failed: " + error.message);
+      }
+    });
+
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        welcomeMessage.textContent = `Welcome back, ${user.displayName} 👋`;
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 1500);
+      }
+    });
+
+    async function handleStreak(uid) {
+      const today = new Date().toLocaleDateString();
+      const userRef = doc(db, "users", uid);
+      const docSnap = await getDoc(userRef);
+
+      if (!docSnap.exists()) {
+        await setDoc(userRef, { lastLogin: today, streak: 1 });
+      } else {
+        const data = docSnap.data();
+        if (data.lastLogin !== today) {
+          const newStreak = (data.streak || 0) + 1;
+          await updateDoc(userRef, { lastLogin: today, streak: newStreak });
+        }
+      }
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Content Creators - ChrisBlogg</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom right, #111, #1a1a1a);
+      color: white;
+      padding: 20px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 30px;
+    }
+
+    header h1 {
+      font-size: 1.8rem;
+    }
+
+    .cta-btn {
+      background: #00bfff;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .cta-btn:hover {
+      background: #009fd9;
+    }
+
+    .creators-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .creator-card {
+      background: #222;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .creator-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .creator-card img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 10px;
+      border: 2px solid #00bfff;
+    }
+
+    .creator-card h3 {
+      margin: 10px 0 5px;
+      font-size: 1.2rem;
+    }
+
+    .creator-card p {
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+
+    @media (max-width: 480px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .cta-btn {
+        width: 100%;
+        margin-top: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Welcome to the Creator Hub</h1>
+    <button class="cta-btn" onclick="window.location.href='create-creator.html'">Join as a Creator</button>
+  </header>
+
+  <div class="creators-grid" id="creatorsGrid">
+    <!-- Creator cards will load here -->
+  </div>
+
+  <!-- Firebase SDKs + Auth -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAmmqdPJL1xgjLl3wF5L1z_AprUJ-UEeD8",
+      authDomain: "chrisblogg-a9653.firebaseapp.com",
+      projectId: "chrisblogg-a9653",
+      storageBucket: "chrisblogg-a9653.firebasestorage.app",
+      messagingSenderId: "774622032573",
+      appId: "1:774622032573:web:769b861fd970145293fdd4",
+      measurementId: "G-BJNC1R5RYR"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const creatorsGrid = document.getElementById("creatorsGrid");
+
+    async function loadCreators() {
+      const snapshot = await getDocs(collection(db, "creators"));
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        const card = document.createElement("div");
+        card.className = "creator-card";
+        card.innerHTML = `
+          <img src="${data.avatar || 'https://via.placeholder.com/100'}" alt="Creator" />
+          <h3>${data.name || 'Unnamed'}</h3>
+          <p>${data.bio || 'No bio provided'}</p>
+        `;
+        creatorsGrid.appendChild(card);
+      });
+    }
+
+    loadCreators();
+  </script>
+</body>
+</html>

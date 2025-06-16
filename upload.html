@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Upload Video</title>
+  <style>
+    body {
+      background: linear-gradient(to bottom right, #111, #1b1b1b);
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    form {
+      max-width: 500px;
+      margin: auto;
+      background: #222;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: none;
+      font-size: 1rem;
+    }
+
+    input[type="file"] {
+      background: #333;
+      color: white;
+    }
+
+    video {
+      max-width: 100%;
+      margin-top: 10px;
+      border-radius: 10px;
+    }
+
+    button {
+      background: #00bfff;
+      color: white;
+      padding: 12px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 480px) {
+      form {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Upload Your Video</h1>
+  <form id="uploadForm">
+    <input type="text" id="title" placeholder="Video Title" required />
+    <textarea id="description" placeholder="Write a short description..." required></textarea>
+    <input type="file" id="videoFile" accept="video/*" required />
+    <video id="preview" controls style="display: none;"></video>
+    <button type="submit">Upload</button>
+  </form>
+
+  <!-- Firebase SDKs -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
+    // ✅ Your Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyAmmqdPJL1xgjLl3wF5L1z_AprUJ-UEeD8",
+      authDomain: "chrisblogg-a9653.firebaseapp.com",
+      projectId: "chrisblogg-a9653",
+      storageBucket: "chrisblogg-a9653.appspot.com",
+      messagingSenderId: "774622032573",
+      appId: "1:774622032573:web:769b861fd970145293fdd4",
+      measurementId: "G-BJNC1R5RYR"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
+
+    let currentUser = null;
+
+    // ✅ Protect the page
+    onAuthStateChanged(auth, user => {
+      if (!user) {
+        alert("Please log in to upload.");
+        window.location.href = "login.html";
+      } else {
+        currentUser = user;
+      }
+    });
+
+    const form = document.getElementById("uploadForm");
+    const videoInput = document.getElementById("videoFile");
+    const preview = document.getElementById("preview");
+
+    // 🎥 Show video preview
+    videoInput.addEventListener("change", () => {
+      const file = videoInput.files[0];
+      if (file) {
+        const url = URL.createObjectURL(file);
+        preview.src = url;
+        preview.style.display = "block";
+      }
+    });
+
+    // 📤 Upload handler
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const title = document.getElementById("title").value.trim();
+      const description = document.getElementById("description").value.trim();
+      const videoFile = videoInput.files[0];
+
+      if (!title || !description || !videoFile) {
+        alert("Please fill out all fields.");
+        return;
+      }
+
+      try {
+        const fileName = `videos/${currentUser.uid}_${Date.now()}_${videoFile.name}`;
+        const storageRef = ref(storage, fileName);
+        await uploadBytes(storageRef, videoFile);
+        const videoURL = await getDownloadURL(storageRef);
+
+        await addDoc(collection(db, "videos"), {
+          uid: currentUser.uid,
+          title,
+          description,
+          videoURL,
+          createdAt: serverTimestamp(),
+          likes: 0
+        });
+
+        alert("✅ Video uploaded successfully!");
+        window.location.href = "creators.html";
+      } catch (err) {
+        console.error("❌ Upload failed:", err);
+        alert("Upload failed. Please try again.");
+      }
+    });
+  </script>
+</body>
+</html>

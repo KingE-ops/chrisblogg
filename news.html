@@ -1,0 +1,198 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chrisland News</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body, html {
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .split-container {
+      display: flex;
+      height: 100vh;
+    }
+
+    .left-side {
+      flex: 1;
+      background: url('https://images.unsplash.com/photo-1494172961521-33799ddd43a5') no-repeat center center/cover;
+    }
+
+    .right-side {
+      flex: 1;
+      overflow-y: auto;
+      background: #111;
+      color: #fff;
+      padding: 2rem;
+    }
+
+    .header {
+      text-align: center;
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin-bottom: 1.5rem;
+      color: #00e0ff;
+      text-shadow: 0 0 10px rgba(0, 224, 255, 0.5);
+    }
+
+    .news-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid rgba(255,255,255,0.15);
+      transition: transform 0.3s ease;
+    }
+
+    .news-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
+
+    .news-title {
+      font-size: 1.4rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    .news-snippet {
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .read-more {
+      color: #0af;
+      cursor: pointer;
+      font-size: 0.95rem;
+      text-decoration: underline;
+    }
+
+    .full-text {
+      display: none;
+      margin-top: 0.5rem;
+      font-size: 0.95rem;
+      color: #ccc;
+    }
+
+    /* Scrollbar styling */
+    .right-side::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .right-side::-webkit-scrollbar-thumb {
+      background: #333;
+      border-radius: 5px;
+    }
+
+    @media (max-width: 768px) {
+      .split-container {
+        flex-direction: column;
+      }
+
+      .left-side {
+        height: 40vh;
+      }
+
+      .right-side {
+        height: 60vh;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="split-container">
+    <div class="left-side"></div>
+    <div class="right-side">
+      <div class="header">📰 Chrisland Newsroom</div>
+      <div id="news-container"></div>
+    </div>
+  </div>
+
+  <script>
+    const newsData = [
+      {
+        title: "AI Revolutionizes Classrooms Nationwide",
+        snippet: "Discover how AI is transforming Chrisland classrooms...",
+        fullText: "Chrisland adopts AI learning tools, improving academic performance, creative expression, and student engagement across departments."
+      },
+      {
+        title: "Chrisland Students Win Tech Innovation Award",
+        snippet: "Meet the students who outshined at the 2025 Tech Expo...",
+        fullText: "A group of Chrisland students developed a solar-powered IoT farming tool, earning top accolades at the national science fair."
+      },
+      {
+        title: "Virtual Reality Labs Now Live in Chrisland",
+        snippet: "Experience science like never before — now in VR...",
+        fullText: "Chrisland pioneers immersive VR science labs, enabling students to explore cells, atoms, and the solar system in 3D simulations."
+      },
+      {
+        title: "New Campus Library Launches eBooks",
+        snippet: "A new digital twist to student research at Chrisland...",
+        fullText: "Students now enjoy instant access to thousands of academic journals, novels, and textbooks through the school's eLibrary initiative."
+      },
+      {
+        title: "Drama Club’s Latest Play Sells Out",
+        snippet: "‘The Digital Dream’ gets standing ovation from all...",
+        fullText: "Chrisland’s Drama Club mesmerizes with a futuristic AI-themed production, drawing praise from parents, staff, and alumni alike."
+      },
+      {
+        title: "Robotics Club Builds AI Security Drone",
+        snippet: "Innovation meets protection with this new invention...",
+        fullText: "The AI drone built by Chrisland’s robotics team uses facial recognition to monitor and report unusual activity on campus."
+      },
+      {
+        title: "Coding Bootcamp Grads Create School App",
+        snippet: "Say hello to the new Chrisland App created by students...",
+        fullText: "A new student-developed app allows Chrisland students to check grades, schedules, and submit assignments on the go."
+      },
+      {
+        title: "Chrisland Launches Eco-Green Project",
+        snippet: "Our campus is going green with new sustainability goals...",
+        fullText: "From planting trees to solar-powered buildings, Chrisland's Eco-Green campaign is shaping a greener future on campus."
+      },
+      {
+        title: "Music Club Drops Their First EP",
+        snippet: "Students combine talent and tech in new studio release...",
+        fullText: "With access to the school’s new digital studio, the music club produced their first EP — already trending on campus."
+      },
+      {
+        title: "New AI-Powered Quiz App Boosts Study",
+        snippet: "Prepare smarter with our new study tech tool...",
+        fullText: "Chrisland’s tech team unveils an app that creates smart quizzes tailored to student weaknesses using AI learning models."
+      },
+      // You can keep adding up to 20+
+    ];
+
+    const container = document.getElementById("news-container");
+
+    newsData.forEach((item, index) => {
+      const card = document.createElement("div");
+      card.className = "news-card";
+
+      card.innerHTML = `
+        <div class="news-title">${item.title}</div>
+        <div class="news-snippet">${item.snippet}</div>
+        <div class="read-more" onclick="toggleFullText(${index})">Read more</div>
+        <div class="full-text" id="full-${index}">${item.fullText}</div>
+      `;
+
+      container.appendChild(card);
+    });
+
+    function toggleFullText(index) {
+      const fullText = document.getElementById(`full-${index}`);
+      fullText.style.display = fullText.style.display === "block" ? "none" : "block";
+    }
+  </script>
+</body>
+</html> -->

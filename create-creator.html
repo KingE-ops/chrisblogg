@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Creator Hub</title>
+  <style>
+    body {
+      background: #111;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+
+    .card {
+      background: #1c1c1c;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: scale(1.03);
+    }
+
+    .avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 15px;
+    }
+
+    .name {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .bio {
+      font-size: 0.95rem;
+      color: #ccc;
+      margin-bottom: 10px;
+    }
+
+    .like-btn {
+      background: transparent;
+      border: none;
+      color: #00bfff;
+      font-size: 1.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .like-btn:hover {
+      color: #0ff;
+    }
+
+    @media (max-width: 480px) {
+      .avatar {
+        width: 80px;
+        height: 80px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Creator Hub 💫</h1>
+  <div class="grid" id="creatorGrid"></div>
+
+  <!-- Firebase SDKs -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAmmqdPJL1xgjLl3wF5L1z_AprUJ-UEeD8",
+      authDomain: "chrisblogg-a9653.firebaseapp.com",
+      projectId: "chrisblogg-a9653",
+      storageBucket: "chrisblogg-a9653.appspot.com",
+      messagingSenderId: "774622032573",
+      appId: "1:774622032573:web:769b861fd970145293fdd4",
+      measurementId: "G-BJNC1R5RYR"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const grid = document.getElementById('creatorGrid');
+
+    async function loadCreators() {
+      const querySnapshot = await getDocs(collection(db, "creators"));
+      grid.innerHTML = "";
+
+      querySnapshot.forEach((docSnap) => {
+        const data = docSnap.data();
+        const card = document.createElement('div');
+        card.className = 'card';
+
+        card.innerHTML = `
+          <img src="${data.avatar}" alt="Avatar" class="avatar" />
+          <div class="name">${data.name}</div>
+          <div class="bio">${data.bio}</div>
+          <button class="like-btn" data-id="${docSnap.id}">
+            ❤️ ${data.likes || 0}
+          </button>
+        `;
+
+        const likeBtn = card.querySelector(".like-btn");
+        likeBtn.addEventListener("click", async () => {
+          const newLikes = (data.likes || 0) + 1;
+          await updateDoc(doc(db, "creators", docSnap.id), {
+            likes: newLikes
+          });
+          likeBtn.innerHTML = `❤️ ${newLikes}`;
+        });
+
+        grid.appendChild(card);
+      });
+    }
+
+    loadCreators();
+  </script>
+
+</body>
+</html>
