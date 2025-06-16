@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chrisland Blog</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; padding: 0; margin: 0; }
+    body, html {
+      height: 100%;
+      font-family: 'Poppins', sans-serif;
+      overflow: hidden;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    video.bg-video {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      z-index: -1;
+      filter: brightness(0.4);
+    }
+
+    .carousel-container {
+      position: absolute;
+      top: 50%; left: 80%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      width: 100%;
+      max-width: 100%;
+      padding: 0 20px;
+    }
+
+    .carousel-card {
+      min-width: 250px;
+      height: 350px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 20px;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      font-weight: bold;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+      transition: transform 0.6s ease, opacity 0.6s ease;
+      cursor: pointer;
+      position: absolute;
+      opacity: 0;
+    }
+
+    .carousel-card.active {
+      transform: scale(1) translateX(0);
+      z-index: 3;
+      opacity: 1;
+    }
+
+    .carousel-card.left {
+      transform: scale(0.8) translateX(-220px);
+      z-index: 2;
+      opacity: 0.6;
+    }
+
+    .carousel-card.right {
+      transform: scale(0.8) translateX(220px);
+      z-index: 2;
+      opacity: 0.6;
+    }
+
+    .carousel-card a {
+      text-decoration: none;
+      color: white;
+    }
+
+    .news, .news-1, .news-2, .news-3 {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      z-index: -1;
+      border-radius: 10px;
+      filter: brightness(0.4);
+    }
+
+    @media (max-width: 600px) {
+      .carousel-card {
+        min-width: 200px;
+        height: 300px;
+      }
+
+      .carousel-container {
+        top: 70%; left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      #welcomeMessage {
+        top: 80px;
+        left: 20px;
+        font-size: 20px;
+      }
+
+      #logoutBtn {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      z-index: -1;
+      border-radius: 10px;
+      filter: brightness(0.4);
+      }
+    }
+
+    #welcomeMessage {
+      position: fixed;
+      top: 300px;
+      left: 70px;
+      font-size: 35px;
+      font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+      color: #fff;
+      z-index: 10;
+    }
+
+    @media (max-width: 600px) {
+      #welcomeMessage{
+        position: absolute;
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        font-weight: 100;
+        top: 120px;
+        right: 30px;
+        font-size: 25px;
+      }      
+    }
+
+    #streakDisplay {
+      position: fixed;
+      top: 10px;
+      right: 20px;
+      font-size: 1.1rem;
+      color: #00ffcc;
+      z-index: 10;
+    }
+
+    #logoutBtn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+    }
+
+    #preloader {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .spinner {
+      border: 6px solid #f3f3f3;
+      border-top: 6px solid #00bfff;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Typewriter Welcome -->
+  <div id="welcomeMessage">Welcome to ChrisBlogg...</div>
+  <div id="streakDisplay"></div>
+  <!-- <button id="logoutBtn">Log Out</button> -->
+
+  <!-- Background Video -->
+  <video class="bg-video" autoplay muted loop>
+    <source src="./images.html/64595-510542195_medium.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <div class="carousel-container" id="carousel">
+  <div class="carousel-card" onclick="location.href='news.html'">
+    <video autoplay muted loop src="./images.html/1992-153555258_medium.mp4" class="news"></video>
+    <a href="./news.html">Chrisland News</a>
+  </div>
+
+  <div class="carousel-card" onclick="location.href='creators.html'">
+    <video autoplay muted loop class="news-2" src="./images.html/75547-556034400_medium.mp4"></video>
+    <a href="">Content Creators</a>
+  </div>
+
+  <div class="carousel-card" onclick="location.href='nominees.html'">
+    <video autoplay muted loop class="news-2" src="./images.html/105437-670487240.mp4"></video>
+    <a href="">Nominees</a>
+  </div>
+
+  <div class="carousel-card" onclick="location.href='audios.html'">
+    <video autoplay muted loop class="news-1" src="./images.html/175594-853887904.mp4"></video>
+    <a href="">Audios</a>
+  </div>
+
+  <div class="carousel-card" onclick="location.href='chats.html'">
+    <video autoplay muted loop class="news-3" src="./images.html/202987-919379330_medium.mp4"></video>
+    <a href="">Chats & Updates</a>
+  </div>
+
+  <div class="carousel-card" onclick="location.href='chats.html'" id="logoutBtn">
+    <!-- <video autoplay muted loop class="news-3" src="./images.html/202987-919379330_medium.mp4"></video> -->
+    <a href="./login.html">Log In & Out</a>
+  </div>
+
+  <!-- 🔥 NEW LOGOUT CARD -->
+  <!-- <div class="carousel-card" id="logoutBtn">
+    <video autoplay muted loop class="news" src="./images.html/logout-bg.mp4"></video>
+    <a href="./login.html">Log In & Out</a>
+  </div>
+</div> -->
+
+  <!-- Preloader -->
+  <div id="preloader">
+    <div class="spinner"></div>
+  </div>
+
+    <!-- Firebase Integration -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAmmqdPJL1xgjLl3wF5L1z_AprUJ-UEeD8",
+      authDomain: "chrisblogg-a9653.firebaseapp.com",
+      projectId: "chrisblogg-a9653",
+      storageBucket: "chrisblogg-a9653.appspot.com",
+      messagingSenderId: "774622032573",
+      appId: "1:774622032573:web:769b861fd970145293fdd4",
+      measurementId: "G-BJNC1R5RYR"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const welcome = document.getElementById("welcomeMessage");
+    const streakDisplay = document.getElementById("streakDisplay");
+    const preloader = document.getElementById("preloader");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    function typeWriter(text, element, speed = 80) {
+      let i = 0;
+      function typing() {
+        if (i < text.length) {
+          element.textContent += text.charAt(i);
+          i++;
+          setTimeout(typing, speed);
+        }
+      }
+      element.textContent = '';
+      typing();
+    }
+
+    async function trackStreak(uid) {
+      const today = new Date().toLocaleDateString();
+      const userRef = doc(db, "users", uid);
+      const docSnap = await getDoc(userRef);
+
+      if (!docSnap.exists()) {
+        await setDoc(userRef, { lastLogin: today, streak: 1 });
+        streakDisplay.textContent = `🔥 Streak: 1 day`;
+      } else {
+        const data = docSnap.data();
+        if (data.lastLogin !== today) {
+          const newStreak = (data.streak || 0) + 1;
+          await updateDoc(userRef, { lastLogin: today, streak: newStreak });
+          streakDisplay.textContent = `🔥 Streak: ${newStreak} days`;
+        } else {
+          streakDisplay.textContent = `🔥 Streak: ${data.streak} days`;
+        }
+      }
+    }
+
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        const name = `Hi ${user.displayName}, Welcome to ChrisBlogg!`;
+        typeWriter(name, welcome);
+        trackStreak(user.uid);
+      } else {
+        welcome.textContent = "Welcome to ChrisBlogg...";
+      }
+    });
+
+    logoutBtn.addEventListener("click", async () => {
+      preloader.style.display = "flex";
+      try {
+        await signOut(auth);
+        setTimeout(() => {
+          window.location.href = "login.html";
+        }, 1500);
+      } catch (err) {
+        alert("Logout failed: " + err.message);
+        preloader.style.display = "none";
+      }
+    });
+  </script>
+
+  <!-- Carousel Script -->
+  <script>
+    const cards = document.querySelectorAll('.carousel-card');
+    let current = 0;
+
+    function updateCarousel() {
+      cards.forEach((card, i) => {
+        card.classList.remove('left', 'right', 'active');
+        if (i === current) card.classList.add('active');
+        else if (i === (current + 1) % cards.length) card.classList.add('right');
+        else if (i === (current - 1 + cards.length) % cards.length) card.classList.add('left');
+      });
+    }
+
+    setInterval(() => {
+      current = (current + 1) % cards.length;
+      updateCarousel();
+    }, 5000);
+
+    let startX = 0;
+    document.addEventListener('touchstart', e => startX = e.touches[0].clientX);
+    document.addEventListener('touchend', e => {
+      const endX = e.changedTouches[0].clientX;
+      if (endX - startX > 50) current = (current - 1 + cards.length) % cards.length;
+      else if (startX - endX > 50) current = (current + 1) % cards.length;
+      updateCarousel();
+    });
+
+    updateCarousel();
+  </script>
+</body>
+</html>

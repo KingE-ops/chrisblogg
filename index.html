@@ -105,11 +105,6 @@
         left: 20px;
         font-size: 20px;
       }
-
-      #logoutBtn {
-        top: 20px;
-        left: 20px;
-      }
     }
 
     #welcomeMessage {
@@ -125,8 +120,6 @@
     @media (max-width: 600px) {
       #welcomeMessage{
         position: absolute;
-        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-        font-weight: 100;
         top: 120px;
         right: 30px;
         font-size: 25px;
@@ -179,6 +172,16 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
+
+    .new-5{
+        position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      z-index: -1;
+      border-radius: 10px;
+      filter: brightness(0.4);
+    }
   </style>
 </head>
 <body>
@@ -219,18 +222,18 @@
     <video autoplay muted loop class="news-3" src="./images.html/202987-919379330_medium.mp4"></video>
     <a href="">Chats & Updates</a>
   </div>
-
+<!-- 
   <div class="carousel-card" onclick="location.href='chats.html'">
-    <!-- <video autoplay muted loop class="news-3" src="./images.html/202987-919379330_medium.mp4"></video> -->
-    <a href="./login.html">Log In & Out</a>
-  </div>
+    <video autoplay muted loop class="news-3" src="./images.html/202987-919379330_medium.mp4"></video>
+    <a href="">Log In & Out</a>
+  </div> -->
 
   <!-- 🔥 NEW LOGOUT CARD -->
-  <!-- <div class="carousel-card" id="logoutBtn">
-    <video autoplay muted loop class="news" src="./images.html/logout-bg.mp4"></video>
+  <div class="carousel-card" id="logoutBtn">
+    <img class="new-5" src="./images.html/wesley-tingey-kFOTEAm6QuY-unsplash.jpg" alt="">
     <a href="./login.html">Log In & Out</a>
   </div>
-</div> -->
+</div>
 
   <!-- Preloader -->
   <div id="preloader">
